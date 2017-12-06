@@ -181,13 +181,31 @@ class CMRESHandler(logging.Handler):
         self.aws_access_key = aws_access_key
         self.aws_secret_key = aws_secret_key
         self.aws_region = aws_region
-        self.auth_type = auth_type
+        #self.auth_type = auth_type
+        if isinstance(auth_type, CMRESHandler.AuthType):
+            self.auth_type = auth_type
+        else:
+            try:
+                self.auth_type = CMRESHandler.AuthType[auth_type]
+            except KeyError:
+                # preserve old behavior
+                pass
+
         self.use_ssl = use_ssl
         self.verify_certs = verify_ssl
         self.buffer_size = buffer_size
         self.flush_frequency_in_sec = flush_frequency_in_sec
         self.es_index_name = es_index_name
-        self.index_name_frequency = index_name_frequency
+        #self.index_name_frequency = index_name_frequency
+        if isinstance(index_name_frequency, CMRESHandler.IndexNameFrequency):
+            self.index_name_frequency = index_name_frequency
+        else:
+            try:
+                self.index_name_frequency = CMRESHandler.IndexNameFrequency[index_name_frequency]
+            except KeyError:
+                # preserve old behavior
+                pass
+
         self.es_doc_type = es_doc_type
         self.es_additional_fields = es_additional_fields.copy()
         self.es_additional_fields.update({'host': socket.gethostname(),
